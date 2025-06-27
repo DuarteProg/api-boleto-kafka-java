@@ -3,6 +3,7 @@ package br.com.duarte.api_boleto_kafka.service;
 import br.com.duarte.api_boleto_kafka.dto.BoletoDTO;
 import br.com.duarte.api_boleto_kafka.entity.BoletoEntity;
 import br.com.duarte.api_boleto_kafka.entity.enums.SituacaoBoleto;
+import br.com.duarte.api_boleto_kafka.mapper.BoletoMapper;
 import br.com.duarte.api_boleto_kafka.repositoy.BoletoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,6 @@ public class BoletoService {
                 .build();
 
         boletoRepository.save(boletoEntity);
-
+        return BoletoMapper.toDTO(boletoEntity);
     }
 }
