@@ -1,5 +1,6 @@
 package br.com.duarte.api_boleto_kafka.service;
 
+import br.com.duarte.api_boleto_kafka.controller.exception.ApplicationException;
 import br.com.duarte.api_boleto_kafka.dto.BoletoDTO;
 import br.com.duarte.api_boleto_kafka.entity.BoletoEntity;
 import br.com.duarte.api_boleto_kafka.entity.enums.SituacaoBoleto;
@@ -21,7 +22,7 @@ public class BoletoService {
     public BoletoDTO salvar(String codigoBarras){
         var boletoOptional = boletoRepository.findByCodigoBarras(codigoBarras);
         if (boletoOptional.isPresent()){
-            throw new RuntimeException("Boleto já existe");
+            throw new ApplicationException("Já existe uma solicitação de pagamento para esse boleto");
         }
 
         var boletoEntity = BoletoEntity.builder()
