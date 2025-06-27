@@ -6,7 +6,7 @@ import br.com.duarte.api_boleto_kafka.entity.BoletoEntity;
 
 public class BoletoMapper {
 
-    public static BoletoDTO toDTO(BoletoEntity boleto){
+    public static BoletoDTO toDTO(BoletoEntity boleto) {
         return BoletoDTO.builder()
                 .codigoBarras(boleto.getCodigoBarras())
                 .situacaoBoleto(boleto.getSituacaoBoleto())
