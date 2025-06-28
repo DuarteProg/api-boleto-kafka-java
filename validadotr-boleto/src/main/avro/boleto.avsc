@@ -1,6 +1,6 @@
 {
   "type": "record",
-  "namespace": "br.com.duarte.api_boleto_kafka.avro",
+  "namespace": "br.com.duarte.validadotr_boleto.avro",
   "name": "Boleto",
   "fields": [
     {
