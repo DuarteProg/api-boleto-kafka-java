@@ -39,10 +39,9 @@ public class BoletoService {
                 .build();
 
 
-        var boletoDTO = BoletoMapper.toDTO(boletoEntity);
         boletoRepository.save(boletoEntity);
-        boletoProducer.enviarMensagem(boletoDTO);
+        boletoProducer.enviarMensagem(BoletoMapper.toAvro(boletoEntity));
 
-        return boletoDTO;
+        return BoletoMapper.toDTO(boletoEntity);
     }
 }
