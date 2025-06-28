@@ -6,6 +6,7 @@ import br.com.duarte.api_boleto_kafka.entity.BoletoEntity;
 import br.com.duarte.api_boleto_kafka.entity.enums.SituacaoBoleto;
 import br.com.duarte.api_boleto_kafka.mapper.BoletoMapper;
 import br.com.duarte.api_boleto_kafka.repositoy.BoletoRepository;
+import br.com.duarte.api_boleto_kafka.service.kafka.BoletoProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,14 +15,19 @@ import java.time.LocalDateTime;
 @Service
 public class BoletoService {
 
-    @Autowired
-    private BoletoRepository boletoRepository;
+    private final BoletoRepository boletoRepository;
+
+    private final BoletoProducer boletoProducer;
+
+    public BoletoService(BoletoRepository boletoRepository, BoletoProducer boletoProducer) {
+        this.boletoRepository = boletoRepository;
+        this.boletoProducer = boletoProducer;
+    }
 
 
-
-    public BoletoDTO salvar(String codigoBarras){
+    public BoletoDTO salvar(String codigoBarras) {
         var boletoOptional = boletoRepository.findByCodigoBarras(codigoBarras);
-        if (boletoOptional.isPresent()){
+        if (boletoOptional.isPresent()) {
             throw new ApplicationException("Já existe uma solicitação de pagamento para esse boleto");
         }
 
@@ -32,7 +38,11 @@ public class BoletoService {
                 .dataAtualizacao(LocalDateTime.now())
                 .build();
 
+
+        var boletoDTO = BoletoMapper.toDTO(boletoEntity);
         boletoRepository.save(boletoEntity);
-        return BoletoMapper.toDTO(boletoEntity);
+        boletoProducer.enviarMensagem(boletoDTO);
+
+        return boletoDTO;
     }
 }
